@@ -1,26 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+import { observer } from 'mobx-react';
+import { store } from './store';
+
+@observer
+export class App extends React.Component {
+  store = store.create();
+
+  render() {
+    return (
+      <div>
+        <button
+          type="button"
+          onClick={() => {
+            console.log('increment from the component');
+            this.store.increment();
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+          +
+        </button>
+        Counter: <span data-testid="output">{this.store.counter}</span>
+        <button
+          type="button"
+          onClick={() => {
+            console.log('decrement from the component');
+            this.store.decrement();
+          }}
+        >
+          -
+        </button>
+      </div>
+    );
+  }
 }
-
-export default App;
