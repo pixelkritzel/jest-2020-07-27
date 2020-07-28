@@ -6,21 +6,25 @@ import { mocked } from 'ts-jest/utils';
 import { App } from './App';
 import { store } from './store';
 
+const mockDecrement = jest.fn().mockImplementation(() => console.log('Running mock decrement'));
+
+const mockIncrement = jest.fn().mockImplementation(() => console.log('Running mock increment'));
+
 jest.mock('./store', () => ({
   store: {
     create() {
       return {
         counter: 50,
-        increment: jest.fn().mockImplementation(() => console.log('Running mock increment')),
-        decrement: jest.fn().mockImplementation(() => console.log('Running mock decrement')),
+        increment: mockIncrement,
+        decrement: mockDecrement,
       };
     },
   },
 }));
 
-beforeAll(() => (mockedStore = mocked(store, true).create()));
+let mockedStore = store.create();
 
-let mockedStore = mocked(store, true).create();
+beforeEach(() => (mockedStore = store.create()));
 
 test('The increment Button to call store.increment', () => {
   const { getByText } = render(<App />);
